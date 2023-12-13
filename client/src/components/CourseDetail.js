@@ -14,7 +14,7 @@ function CourseDetail() {
 
 
     useEffect(() => {
-        //  course data from api
+        //  get specific course data from api
         const getCourses = async () => {
             try {
                 const resp = await callApi(`/courses/${id}`, 'GET');

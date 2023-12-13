@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 
 function Header() {
+    // if a user is authenticated display the users name on the header
     const { auth } = useContext(UserContext)
     
     return (

@@ -24,6 +24,7 @@ function UserSignIn() {
         }; 
 
         try {
+            // use credentials passed in to attempt sign in 
             const user = await actions.signIn(credentials);
             if(user){
                 navigate(from);
@@ -51,7 +52,7 @@ function UserSignIn() {
                         </ul>
                     </div>
                     : null
-                }
+            }
             <form onSubmit={handleSubmit}>
                 <label htmlFor="emailAddress">Email Address</label>
                 <input id="emailAddress" name="emailAddress" type="email" ref={emailAddress} />

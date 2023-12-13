@@ -30,7 +30,7 @@ function CreateCourse() {
             userId: (auth ? auth.id : null)
         }
 
-        // Post API call to backend
+        // Post API call to backend to create course
         try {
             const resp = await callApi('/courses', 'POST', newCourse, auth);
             if(resp.status === 201){

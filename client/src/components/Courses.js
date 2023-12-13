@@ -6,7 +6,7 @@ import { Link, NavLink } from 'react-router-dom';
 function Courses() {
     const [courses, setCourses] = useState([]);
 
-    // get courses on render
+    // get ALL courses on render
     useEffect(() => {
     callApi('/courses', 'GET')
         .then(resp => resp.json())

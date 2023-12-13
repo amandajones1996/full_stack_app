@@ -24,6 +24,7 @@ function UserSignUp() {
             emailAddress: emailAddress.current.value,
             password: password.current.value
         }
+        // take user info to pass in to backend and create a new user
         try {
             const resp = await callApi('/users', 'POST', user);
             if(resp.status === 201){
@@ -53,7 +54,7 @@ function UserSignUp() {
                         </ul>
                     </div>
                     : null
-                }
+            }
                 <br />
                     <div>
                         <form onSubmit={handleSubmit}>

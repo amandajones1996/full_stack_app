@@ -15,7 +15,7 @@ import './styles/reset.css';
 import './styles/global.css';
 
 function App() {
-
+// route components
   return (
     <div>
       <Header />

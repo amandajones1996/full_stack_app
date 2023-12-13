@@ -17,7 +17,7 @@ function UpdateCourse() {
     const materialsNeeded = useRef(null);
     const [errors, setErrors] = useState([]);
 
-
+    // get and render course selected to be updated
     useEffect(() => {
         // get current course details
         const getCourse = async () => {
@@ -43,11 +43,13 @@ function UpdateCourse() {
         getCourse();
     }, [id, navigate, auth.id]);
 
+    // navigate back home if cancel button is selected
     const handleCancel = (e) => {
         e.preventDefault();
         navigate('/');
     };
 
+    // make put call to backend 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const courseContent = {
