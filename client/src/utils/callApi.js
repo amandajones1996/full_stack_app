@@ -14,7 +14,7 @@ export const callApi = (path, method = 'GET', body = null, credentials = null) =
 
     // if credentials truthy -> add auth to options
     if(credentials){
-        const encodedCredential = btoa(`${credentials.username}:${credentials.password}`);
+        const encodedCredential = btoa(`${credentials.emailAddress}:${credentials.password}`);
         getOptions.headers.Authorization = `Basic ${encodedCredential}`;
     }
     return fetch(url, getOptions)

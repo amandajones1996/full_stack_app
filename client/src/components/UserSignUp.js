@@ -29,7 +29,7 @@ function UserSignUp() {
             if(resp.status === 201){
                 console.log(`${user.firstName} has been signed in.`);
                 await actions.signIn(user);
-                console.log("here")
+            
                 navigate('/');
             } else if(resp.status === 400){
                 const errorData = await resp.json();
@@ -45,10 +45,15 @@ function UserSignUp() {
     return (
         <div className="form--centered">
             <h2><strong>Sign Up</strong></h2>
-            <h3>Validation Errors</h3>
-                    <ul>
-                        {errors}
-                    </ul>
+            { errors.length ?
+                    <div className="validation--errors">
+                        <h3>Validation Errors</h3>
+                        <ul>
+                        {errors.map((error) => <li>{error}</li>)}
+                        </ul>
+                    </div>
+                    : null
+                }
                 <br />
                     <div>
                         <form onSubmit={handleSubmit}>

@@ -38,30 +38,34 @@ function CreateCourse() {
                 navigate('/');
             }else if(resp.status === 400){
                 const errorData = await resp.json();
+                console.log(errorData.errors)
                 setErrors(errorData.errors);
             }
         } catch (e) {
             console.log(`Error: ${e}`);
         }
     };
-
+    console.log(auth)
     return (
        
             <div className="wrap">
                 <h2>Create Course</h2>
-                <div className="validation--errors">
-                    <h3>Validation Errors</h3>
-                    <ul>
-                        {errors}
-                    </ul>
-                </div>
+                { errors.length ?
+                    <div className="validation--errors">
+                        <h3>Validation Errors</h3>
+                        <ul>
+                            {errors.map((error) => <li>{error}</li>)}
+                        </ul>
+                    </div>
+                    : null
+                }
                 <form onSubmit={handleSubmit}>
                     <div className="main--flex">
                         <div>
                             <label htmlFor="courseTitle">Course Title</label>
                             <input id="courseTitle" name="courseTitle" type="text" ref={title} />
 
-                            <p>By {auth.User.firstName} {auth.User.lastName}</p> 
+                            <p>By {auth.firstName} {auth.lastName}</p> 
 
                             <label htmlFor="courseDescription">Course Description</label>
                             <textarea id="courseDescription" name="courseDescription" ref={description}></textarea>

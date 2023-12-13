@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 function Header() {
     const { auth } = useContext(UserContext)
-    console.log(auth)
+    
     return (
         <header>
             <div className="wrap header--flex">
@@ -13,8 +13,8 @@ function Header() {
                 <nav>
                     {auth !== null ? 
                         <ul className="header--signedin">
-                            <span>Welcome, {auth.firstName}!</span>
-                            <Link to="/sign-out">Sign Out</Link>
+                            <span>Welcome, {auth.firstName}! </span>
+                            <Link to="/signout">Sign Out</Link>
                         </ul>
                      : 
                         <ul className="header--signedout">

@@ -43,7 +43,15 @@ function UserSignIn() {
     return (
         <div className="form--centered">
             <h2>Sign In</h2>
-            <div>{errors}</div>
+            { errors.length ?
+                    <div className="validation--errors">
+                        <h3>Validation Errors</h3>
+                        <ul>
+                        {errors.map((error) => <li>{error}</li>)}
+                        </ul>
+                    </div>
+                    : null
+                }
             <form onSubmit={handleSubmit}>
                 <label htmlFor="emailAddress">Email Address</label>
                 <input id="emailAddress" name="emailAddress" type="email" ref={emailAddress} />

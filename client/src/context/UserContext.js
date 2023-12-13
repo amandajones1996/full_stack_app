@@ -10,13 +10,13 @@ export const UserProvider = (props) => {
     const signIn = async (credentials) => {
         const resp = await callApi("/users", "GET", null, credentials);
         // if user returned -> update user state
-        console.log(resp)
+        
         if(resp.status === 200){
             let user = await resp.json();
-            console.log(user)
+            
             user.password = credentials.password;
             setAuth(user)
-            console.log(auth)
+            
             return user
         }else if(resp.status === 401){
             return null

@@ -6,6 +6,7 @@ import UserContext from '../context/UserContext';
 
 
 function UpdateCourse() {
+    const [isLoaded, setIsLoaded] = useState(false);
     const [course, setCourse] = useState(null);
     const { auth } = useContext(UserContext);
     const { id } = useParams();
@@ -14,24 +15,28 @@ function UpdateCourse() {
     const description = useRef(null);
     const estimatedTime = useRef(null);
     const materialsNeeded = useRef(null);
+    const [errors, setErrors] = useState([]);
 
 
     useEffect(() => {
         // get current course details
-        const getCourse = async (id) => {
+        const getCourse = async () => {
             try {
-                const resp = await callApi(`/course/${id}`, 'GET');
-                if(resp.status === 200){
+                const resp = await callApi(`/courses/${id}`, 'GET');
+                if (resp.status === 200) {
                     const course = await resp.json();
-                    if(course.User.id !== auth.id){
+                    console.log(course)
+                    console.log(auth)
+                    if (course.userId !== auth.id) {
                         console.log(`To update ${course.title} you must be the owner.`)
-                    } else if(resp.status === 404){
+                    } else if (resp.status === 404) {
                         throw Error('Course not found.')
                     } else {
                         setCourse(course);
+                        setIsLoaded(true);
                     }
                 }
-            } catch (e){
+            } catch (e) {
                 throw Error(`Error: ${e}`);
             }
         }
@@ -52,46 +57,60 @@ function UpdateCourse() {
             materialsNeeded: materialsNeeded.current.value,
             userId: auth.id
         }
+        console.log(courseContent)
         const resp = await callApi(`/courses/${id}`, 'PUT', courseContent, auth);
-        try{
-            if(resp.status === 204){
+        try {
+            if (resp.status === 204) {
                 console.log('course created!');
                 navigate(`/courses/${id}`);
-            } else if (resp.status === 404){
+            } else if (resp.status === 404) {
                 throw Error(`Course with id ${courseContent.userId} could not be found`);
-            } 
-        } catch (e){
+            }else if(resp.status === 400){
+                const errorData = await resp.json();
+                setErrors(errorData.errors);
+            }
+        } catch (e) {
             throw Error('Error while processing your request');
         }
     };
+    if (isLoaded) {
+        return (
+            <div className="wrap">
+                <h2>Update Course</h2>
+                { errors.length ?
+                    <div className="validation--errors">
+                        <h3>Validation Errors</h3>
+                        <ul>
+                        {errors.map((error) => <li>{error}</li>)}
+                        </ul>
+                    </div>
+                    : null
+                }
+                <form onSubmit={handleSubmit}>
+                    <div className="main--flex">
+                        <div>
+                            <label htmlFor="title">Course Title</label>
+                            <input id="title" name="title" type="text" ref={title} defaultValue={course.title ? course.title : ''} />
 
-    return (
-                <div className="wrap">
-                    <h2>Update Course</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div className="main--flex">
-                            <div>
-                                <label htmlFor="title">Course Title</label>
-                                <input id="title" name="title" type="text" ref={title} defaultValue={course.title ? course.title : '' } />
+                            <p>By {auth.firstName} {auth.lastName}</p>
 
-                                <p>By {auth.firstName} {auth.lastName}</p>
-
-                                <label htmlFor="description">Course Description</label>
-                                <textarea id="description" name="description" ref={description} defaultValue={course.description ? course.description : ''} ></textarea>
-                            </div>
-                            <div>
-                                <label htmlFor="estimatedTime">Estimated Time</label>
-                                <input id="estimatedTime" name="estimatedTime" type="text" ref={estimatedTime} defaultValue={course.estimatedTime ? course.estimatedTime : ''} />
-
-                                <label htmlFor="materialsNeeded">Materials Needed</label>
-                                <textarea id="materialsNeeded" name="materialsNeeded"ref={materialsNeeded} defaultValue={course.materialsNeeded ? course.materialsNeeded : ''} ></textarea>
-                            </div>
+                            <label htmlFor="description">Course Description</label>
+                            <textarea id="description" name="description" ref={description} defaultValue={course.description ? course.description : ''} ></textarea>
                         </div>
-                        <button className="button" type="submit">Update Course</button>
-                        <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
-                    </form>
-                </div>
-    );
+                        <div>
+                            <label htmlFor="estimatedTime">Estimated Time</label>
+                            <input id="estimatedTime" name="estimatedTime" type="text" ref={estimatedTime} defaultValue={course.estimatedTime ? course.estimatedTime : ''} />
+
+                            <label htmlFor="materialsNeeded">Materials Needed</label>
+                            <textarea id="materialsNeeded" name="materialsNeeded" ref={materialsNeeded} defaultValue={course.materialsNeeded ? course.materialsNeeded : ''} ></textarea>
+                        </div>
+                    </div>
+                    <button className="button" type="submit">Update Course</button>
+                    <button className="button button-secondary" onClick={handleCancel}>Cancel</button>
+                </form>
+            </div>
+        );
+    }
 }
 
 export default UpdateCourse;
